@@ -6,207 +6,59 @@
   <title>Michigan AI Data Center Power Map — Dr. Mario DeSean Booker</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #f9f9f7;
-      --surface: #ffffff;
-      --surface2: #f1efe8;
-      --border: rgba(0,0,0,0.12);
-      --border2: rgba(0,0,0,0.22);
-      --text: #1a1a18;
-      --text2: #5f5e5a;
-      --text3: #888780;
-      --accent: #185FA5;
-      --water: #bfdbfe;
-      --county: #d1fae5;
-      --county-stroke: rgba(0,0,0,0.15);
-      --label: rgba(0,0,0,0.35);
+      --bg: #f9f9f7; --surface: #ffffff; --surface2: #f1efe8;
+      --border: rgba(0,0,0,0.12); --border2: rgba(0,0,0,0.22);
+      --text: #1a1a18; --text2: #5f5e5a; --text3: #888780;
+      --accent: #185FA5; --water: #bfdbfe; --county: #d1fae5;
+      --county-stroke: rgba(0,0,0,0.15); --label: rgba(0,0,0,0.35);
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #18181b;
-        --surface: #27272a;
-        --surface2: #3f3f46;
-        --border: rgba(255,255,255,0.10);
-        --border2: rgba(255,255,255,0.20);
-        --text: #f4f4f5;
-        --text2: #a1a1aa;
-        --text3: #71717a;
-        --accent: #60a5fa;
-        --water: #1e3a5f;
-        --county: #1a3a2a;
-        --county-stroke: rgba(255,255,255,0.10);
-        --label: rgba(255,255,255,0.35);
+        --bg: #18181b; --surface: #27272a; --surface2: #3f3f46;
+        --border: rgba(255,255,255,0.10); --border2: rgba(255,255,255,0.20);
+        --text: #f4f4f5; --text2: #a1a1aa; --text3: #71717a;
+        --accent: #60a5fa; --water: #1e3a5f; --county: #1a3a2a;
+        --county-stroke: rgba(255,255,255,0.10); --label: rgba(255,255,255,0.35);
       }
     }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      font-size: 15px;
-      line-height: 1.6;
-      padding: 32px 20px 60px;
-    }
-
-    .page { max-width: 800px; margin: 0 auto; }
-
+    body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.6; padding: 32px 20px 60px; }
+    .page { max-width: 820px; margin: 0 auto; }
     header { margin-bottom: 28px; }
-    header h1 {
-      font-size: 22px;
-      font-weight: 500;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-    .byline {
-      font-size: 13px;
-      color: var(--text2);
-      margin-bottom: 6px;
-    }
+    header h1 { font-size: 22px; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+    .byline { font-size: 13px; color: var(--text2); margin-bottom: 6px; }
     .byline a { color: var(--accent); text-decoration: none; }
     .byline a:hover { text-decoration: underline; }
-    .desc {
-      font-size: 13px;
-      color: var(--text2);
-      max-width: 680px;
-      line-height: 1.55;
-    }
-
-    #controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 12px;
-    }
-    .fb {
-      font-size: 12px;
-      padding: 5px 14px;
-      border-radius: 20px;
-      border: 0.5px solid var(--border2);
-      background: transparent;
-      color: var(--text2);
-      cursor: pointer;
-      font-family: inherit;
-      transition: background 0.12s;
-    }
-    .fb.on {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
-    }
+    .desc { font-size: 13px; color: var(--text2); max-width: 700px; line-height: 1.55; }
+    .updated { font-size: 11px; color: var(--text3); margin-top: 4px; }
+    #controls { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .fb { font-size: 12px; padding: 5px 14px; border-radius: 20px; border: 0.5px solid var(--border2); background: transparent; color: var(--text2); cursor: pointer; font-family: inherit; transition: background 0.12s; }
+    .fb.on { background: var(--accent); color: #fff; border-color: var(--accent); }
     .fb:hover:not(.on) { background: var(--surface2); }
-
-    #legend {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-bottom: 10px;
-      font-size: 12px;
-      color: var(--text2);
-      align-items: center;
-    }
+    #legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 10px; font-size: 12px; color: var(--text2); align-items: center; }
     .ld { display: flex; align-items: center; gap: 5px; }
-    .lc {
-      width: 11px; height: 11px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .legend-note {
-      margin-left: auto;
-      font-size: 11px;
-      color: var(--text3);
-    }
-
-    #map-box {
-      position: relative;
-      width: 100%;
-      background: var(--water);
-      border-radius: 10px;
-      border: 0.5px solid var(--border);
-      overflow: visible;
-    }
+    .lc { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+    .legend-note { margin-left: auto; font-size: 11px; color: var(--text3); }
+    #map-box { position: relative; width: 100%; background: var(--water); border-radius: 10px; border: 0.5px solid var(--border); overflow: visible; }
     #map-box svg { display: block; width: 100%; }
-
-    #tt {
-      position: absolute;
-      display: none;
-      width: 240px;
-      background: var(--surface);
-      border: 0.5px solid var(--border2);
-      border-radius: 10px;
-      padding: 12px 14px;
-      font-size: 12px;
-      color: var(--text);
-      pointer-events: none;
-      z-index: 20;
-    }
+    #tt { position: absolute; display: none; width: 250px; background: var(--surface); border: 0.5px solid var(--border2); border-radius: 10px; padding: 12px 14px; font-size: 12px; color: var(--text); pointer-events: none; z-index: 20; }
     #tt .tn { font-weight: 500; font-size: 13px; margin-bottom: 2px; }
     #tt .tc { font-size: 11px; color: var(--text2); margin-bottom: 7px; }
-    #tt .tr {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 3px;
-      color: var(--text2);
-      font-size: 11px;
-    }
+    #tt .tr { display: flex; justify-content: space-between; gap: 10px; margin-top: 3px; color: var(--text2); font-size: 11px; }
     #tt .tv { color: var(--text); font-weight: 500; }
-    #tt .tnotes {
-      font-size: 11px;
-      color: var(--text2);
-      margin-top: 7px;
-      line-height: 1.45;
-      border-top: 0.5px solid var(--border);
-      padding-top: 7px;
-    }
-    #tt .tbadge {
-      display: inline-block;
-      font-size: 10px;
-      padding: 2px 8px;
-      border-radius: 6px;
-      margin-top: 6px;
-    }
-
-    #loading {
-      text-align: center;
-      padding: 80px 20px;
-      color: var(--text2);
-      font-size: 13px;
-    }
-    #err {
-      text-align: center;
-      padding: 60px 20px;
-      color: #A32D2D;
-      font-size: 13px;
-      display: none;
-    }
-
-    #stats {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 8px;
-      margin-top: 14px;
-    }
-    .sc {
-      background: var(--surface2);
-      border-radius: 8px;
-      padding: 10px 13px;
-    }
+    #tt .tnotes { font-size: 11px; color: var(--text2); margin-top: 7px; line-height: 1.45; border-top: 0.5px solid var(--border); padding-top: 7px; }
+    #tt .tbadge { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 6px; margin-top: 6px; }
+    #loading { text-align: center; padding: 80px 20px; color: var(--text2); font-size: 13px; }
+    #err { text-align: center; padding: 60px 20px; color: #A32D2D; font-size: 13px; display: none; }
+    #stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; margin-top: 14px; }
+    .sc { background: var(--surface2); border-radius: 8px; padding: 10px 13px; }
     .sl { font-size: 11px; color: var(--text2); margin-bottom: 1px; }
     .sv { font-size: 22px; font-weight: 500; color: var(--text); }
     .ss { font-size: 10px; color: var(--text3); }
-
-    footer {
-      margin-top: 36px;
-      padding-top: 20px;
-      border-top: 0.5px solid var(--border);
-      font-size: 12px;
-      color: var(--text3);
-      line-height: 1.6;
-    }
+    footer { margin-top: 36px; padding-top: 20px; border-top: 0.5px solid var(--border); font-size: 12px; color: var(--text3); line-height: 1.6; }
     footer a { color: var(--accent); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
+    footer p + p { margin-top: 6px; }
   </style>
 </head>
 <body>
@@ -220,18 +72,13 @@
       &nbsp;·&nbsp;
       <a href="https://doi.org/10.30574/wjarr.2025.28.3.4306" target="_blank" rel="noopener">Lyon Township study (WJARR, 2025)</a>
     </p>
-    <p class="desc">
-      Interactive visualization of AI and semiconductor data center proposals across Michigan,
-      mapped against community demographics and resistance patterns. Part of an ongoing
-      digital redlining research program documenting how AI infrastructure placement
-      concentrates environmental burdens along racial and economic lines.
-      Hover any marker for site details. Use the filters to isolate by project status.
-    </p>
+    <p class="desc">Interactive visualization of AI and semiconductor data center proposals across Michigan, mapped against community demographics and resistance patterns. Part of an ongoing digital redlining research program documenting how AI infrastructure placement concentrates environmental burdens along racial and economic lines. Hover any marker for site details.</p>
+    <p class="updated">Last verified: June 9, 2026 &nbsp;·&nbsp; 10 sites tracked</p>
   </header>
 
   <div id="controls">
     <button class="fb on" data-f="all">All sites</button>
-    <button class="fb" data-f="active">Under construction</button>
+    <button class="fb" data-f="active">Under construction / approved</button>
     <button class="fb" data-f="proposed">Proposed</button>
     <button class="fb" data-f="withdrawn">Withdrawn</button>
   </div>
@@ -240,10 +87,7 @@
     <div class="ld"><div class="lc" style="background:#A32D2D;"></div>&gt;500 MW</div>
     <div class="ld"><div class="lc" style="background:#BA7517;"></div>100–500 MW</div>
     <div class="ld"><div class="lc" style="background:#185FA5;"></div>&lt;100 MW / unknown</div>
-    <div class="ld">
-      <div class="lc" style="background:#888780; outline: 1.5px dashed #5F5E5A; outline-offset:1px;"></div>
-      Withdrawn
-    </div>
+    <div class="ld"><div class="lc" style="background:#888780; outline:1.5px dashed #5F5E5A; outline-offset:1px;"></div>Withdrawn</div>
     <span class="legend-note">Outer ring = community resistance documented</span>
   </div>
 
@@ -254,28 +98,16 @@
   </div>
 
   <div id="stats">
-    <div class="sc"><div class="sl">Sites tracked</div><div class="sv" id="s1">9</div><div class="ss">across Michigan</div></div>
-    <div class="sc"><div class="sl">Combined capacity</div><div class="sv" id="s2">4,880</div><div class="ss">MW proposed</div></div>
-    <div class="sc"><div class="sl">≥70% white communities</div><div class="sv" id="s3">7</div><div class="ss">of visible sites</div></div>
-    <div class="sc"><div class="sl">Organized resistance</div><div class="sv" id="s4">6</div><div class="ss">sites with opposition</div></div>
+    <div class="sc"><div class="sl">Sites tracked</div><div class="sv" id="s1">10</div><div class="ss">across Michigan</div></div>
+    <div class="sc"><div class="sl">Combined capacity</div><div class="sv" id="s2">5,317</div><div class="ss">MW proposed</div></div>
+    <div class="sc"><div class="sl">Majority-white communities</div><div class="sv" id="s3">8</div><div class="ss">of 10 sites (≥70% white)</div></div>
+    <div class="sc"><div class="sl">Organized resistance</div><div class="sv" id="s4">8</div><div class="ss">sites with documented opposition</div></div>
   </div>
 
   <footer>
-    <p>
-      <strong>Data sources:</strong> U.S. Census Bureau American Community Survey 5-Year Estimates (2020);
-      The Gander / Gander Newsroom (March 2026); Crain's Detroit Business (2026);
-      Fortune (May 2026); Southern Environmental Law Center (2024);
-      Booker, M. D. (2025). Digital redlining: AI infrastructure and environmental racism in contemporary America.
-      <em>World Journal of Advanced Research and Reviews, 27</em>(01), 974–988.
-      <a href="https://doi.org/10.30574/wjarr.2025.27.1.2602" target="_blank" rel="noopener">https://doi.org/10.30574/wjarr.2025.27.1.2602</a>
-    </p>
-    <p style="margin-top:8px;">
-      Map topology: U.S. Census Bureau cartographic county boundaries (2017 edition) via
-      <a href="https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json" target="_blank" rel="noopener">us-atlas@3</a>.
-      Rendered with <a href="https://d3js.org" target="_blank" rel="noopener">D3.js</a> and
-      <a href="https://github.com/topojson/topojson" target="_blank" rel="noopener">TopoJSON</a>.
-      &copy; 2025 Mario DeSean Booker. Research use permitted with attribution.
-    </p>
+    <p><strong>Data sources:</strong> U.S. Census Bureau American Community Survey 5-Year Estimates (2020); The Gander Newsroom (updated June 5, 2026); Planet Detroit (June 2026); Crain's Detroit Business (May–June 2026); Detroit News (June 1, 2026); Eastern Echo (May 2026); Ypsilanti Township Board of Trustees official records (2026); Fortune (May 2026); WXYZ Detroit (June 2026); Southern Environmental Law Center (2024).</p>
+    <p>Booker, M. D. (2025). Digital redlining: AI infrastructure and environmental racism in contemporary America. <em>World Journal of Advanced Research and Reviews, 27</em>(01), 974–988. <a href="https://doi.org/10.30574/wjarr.2025.27.1.2602" target="_blank" rel="noopener">https://doi.org/10.30574/wjarr.2025.27.1.2602</a></p>
+    <p>Map topology: U.S. Census Bureau cartographic county boundaries (2017 ed.) via <a href="https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json" target="_blank" rel="noopener">us-atlas@3</a>. Rendered with <a href="https://d3js.org" target="_blank" rel="noopener">D3.js</a> and <a href="https://github.com/topojson/topojson" target="_blank" rel="noopener">TopoJSON</a>. &copy; 2026 Mario DeSean Booker. Research use permitted with attribution.</p>
   </footer>
 
 </div>
@@ -285,76 +117,94 @@
 <script>
 const SITES = [
   {
-    id:"saline", name:"Saline Township — Stargate",
+    id:"saline",
+    name:"Saline Township — Stargate",
     co:"OpenAI / Oracle / Related Digital",
     status:"active", mw:1400,
     lat:42.175, lon:-83.785,
     white:89, income:98000, resist:true,
-    notes:"700-acre campus; 1.4 GW approved. Construction began June 2026 despite township vote against. Washtenaw County."
+    notes:"1.4 GW, 700-acre campus. Construction underway as of June 2026. Sam Altman and Gov. Whitmer visited site June 1, 2026. Township settled Related Digital lawsuit with 12-year, 50% property tax abatement. Washtenaw County."
   },
   {
-    id:"lyon", name:"Lyon Township — Project Flex",
+    id:"lyon",
+    name:"Lyon Township — Project Flex",
     co:"Verrus / Anthropic (end user)",
     status:"proposed", mw:500,
     lat:42.482, lon:-83.622,
     white:82, income:105000, resist:true,
-    notes:"172-acre, 1.8M sq ft campus. Moratorium enacted but does not affect Project Flex. Planning Commission vote June 8, 2026. Oakland County."
+    notes:"172-acre, 1.8M sq ft campus. Township board voted unanimously to deny stormwater easement (May 2026), effectively blocking construction. Residents packed June 8 planning meeting. Developer threatens lawsuit. Oakland County."
   },
   {
-    id:"vanburen", name:"Van Buren Township — Project Cannoli",
+    id:"vanburen",
+    name:"Van Buren Township — Project Cannoli",
     co:"Google",
-    status:"proposed", mw:1000,
+    status:"active", mw:1000,
     lat:42.270, lon:-83.460,
-    white:67, income:62000, resist:false,
-    notes:"~282 acres, 1 GW near Detroit Metro Airport. Google confirmed March 2026. Wayne County."
+    white:67, income:62000, resist:true,
+    notes:"1 GW near Detroit Metro Airport. Planning Commission approved site plan 5-1 (Feb. 2026). Township approved $124M in property tax breaks (May 2026). Google confirmed as end user March 2026. Wayne County."
   },
   {
-    id:"dorr", name:"Dorr Township",
+    id:"ypsilanti",
+    name:"Ypsilanti Township — U-M / Los Alamos",
+    co:"University of Michigan / Los Alamos National Laboratory",
+    status:"proposed", mw:100,
+    lat:42.240, lon:-83.616,
+    white:42, income:41000, resist:true,
+    notes:"$1.25B supercomputing facility. U-M purchased 124-acre Textile Road parcel March 2026. Community is majority non-white. Three township resolutions in opposition. Ypsilanti utility authority imposed 12-month water moratorium April 2026. Construction delayed to 2027. Washtenaw County."
+  },
+  {
+    id:"dorr",
+    name:"Dorr Township",
     co:"Microsoft",
     status:"proposed", mw:300,
     lat:42.733, lon:-85.733,
     white:91, income:72000, resist:true,
-    notes:"Microsoft data center in Allegan County. Planning commission opposition active."
+    notes:"Microsoft data center in Allegan County. Dorr Township enacted a temporary moratorium on new data center development in response to community opposition."
   },
   {
-    id:"gaines", name:"Gaines Township — Switch Pyramid",
+    id:"gaines",
+    name:"Gaines Township — Switch Pyramid",
     co:"Switch",
     status:"active", mw:237,
     lat:42.843, lon:-85.633,
     white:84, income:68000, resist:false,
-    notes:"Expansion of Michigan's largest existing data center. 237 MW target. Kent County."
+    notes:"Expansion of Michigan's largest existing data center campus. 237 MW expansion target. Kent County."
   },
   {
-    id:"marshall", name:"Marshall",
+    id:"marshall",
+    name:"Marshall",
     co:"Alterra Development",
     status:"proposed", mw:1400,
     lat:42.272, lon:-84.965,
     white:79, income:48000, resist:true,
-    notes:"270 acres in Brooks Industrial Park; roughly half wetlands. Up to 1,400 MW with on-site gas turbines proposed. Calhoun County."
+    notes:"270 acres in Brooks Industrial Park; roughly half wetlands near Stuart Lake. Up to 1,400 MW with on-site gas turbines proposed. No rezoning required. Residents organized over noise, emissions, and wetland impacts. Calhoun County."
   },
   {
-    id:"hyperscale", name:"Hyperscale Data Campus",
+    id:"hyperscale",
+    name:"Hyperscale Data Campus",
     co:"Hyperscale Data Inc. / Alliance Cloud Services",
     status:"active", mw:340,
     lat:43.025, lon:-83.690,
     white:null, income:null, resist:false,
-    notes:"34-acre site. Currently 30 MW operational. Phased expansion to 340 MW by 2029. Genesee County area."
+    notes:"34-acre site. Currently 30 MW operational. Signed utility agreement for expansion to 340 MW by 2029. Genesee County area."
   },
   {
-    id:"mundy", name:"Mundy Township — SanDisk (withdrawn)",
+    id:"mundy",
+    name:"Mundy Township — SanDisk (withdrawn)",
     co:"SanDisk Corporation",
     status:"withdrawn", mw:0,
     lat:42.963, lon:-83.820,
     white:96, income:78213, resist:true,
-    notes:"$63B semiconductor campus abandoned entirely when community elected anti-megasite supervisor, November 2024. Key validation case for digital redlining framework. Genesee County."
+    notes:"$63B semiconductor campus abandoned entirely when community elected anti-megasite supervisor, November 2024. Corporation walked away from $260M in state site preparation rather than accept community oversight. Key validation case for digital redlining framework. Genesee County."
   },
   {
-    id:"gaylord", name:"Gaylord / Otsego County",
+    id:"gaylord",
+    name:"Gaylord / Otsego County",
     co:"Undisclosed developer",
     status:"proposed", mw:200,
     lat:45.027, lon:-84.674,
     white:93, income:55000, resist:true,
-    notes:"Northern Michigan. Northern Michigan Chamber Alliance forum held June 2026. Community opposition active. Otsego County."
+    notes:"Northern Michigan. Northern Michigan Chamber Alliance forum held June 2026. Community opposition active. Rural majority-white area. Otsego County."
   }
 ];
 
@@ -372,11 +222,11 @@ function mwR(s) {
 }
 function statusInfo(st) {
   const m = {
-    active:   ["Under construction", "#EAF3DE", "#27500A"],
-    proposed: ["Proposed",           "#E6F1FB", "#0C447C"],
-    withdrawn:["Withdrawn",          "#F1EFE8", "#444441"]
+    active:   ["Under construction / approved","#EAF3DE","#27500A"],
+    proposed: ["Proposed","#E6F1FB","#0C447C"],
+    withdrawn:["Withdrawn","#F1EFE8","#444441"]
   };
-  return m[st] || ["Unknown", "#F1EFE8", "#444441"];
+  return m[st] || ["Unknown","#F1EFE8","#444441"];
 }
 
 let activeFilter = "all";
@@ -390,61 +240,50 @@ function visibleSites() {
 function updateStats() {
   const v = visibleSites();
   document.getElementById("s1").textContent = v.length;
-  document.getElementById("s2").textContent = v.reduce((a,s) => a + s.mw, 0).toLocaleString();
-  document.getElementById("s3").textContent = v.filter(s => s.white != null && s.white >= 70).length;
-  document.getElementById("s4").textContent = v.filter(s => s.resist).length;
+  document.getElementById("s2").textContent = v.reduce((a,s)=>a+s.mw,0).toLocaleString();
+  document.getElementById("s3").textContent = v.filter(s=>s.white!=null&&s.white>=70).length;
+  document.getElementById("s4").textContent = v.filter(s=>s.resist).length;
 }
 
 function renderMarkers(svg) {
   svg.selectAll(".site-g").remove();
   if (!proj) return;
   visibleSites().forEach(site => {
-    const [px, py] = proj([site.lon, site.lat]);
+    const pt = proj([site.lon, site.lat]);
+    if (!pt) return;
+    const [px, py] = pt;
     const c = mwColor(site);
     const r = mwR(site);
-    const g = svg.append("g").attr("class", "site-g").style("cursor", "pointer");
+    const g = svg.append("g").attr("class","site-g").style("cursor","pointer");
 
     if (site.resist) {
       g.append("circle")
-        .attr("cx", px).attr("cy", py)
-        .attr("r", r + 6)
-        .attr("fill", "none")
-        .attr("stroke", c)
-        .attr("stroke-width", "1.5")
-        .attr("stroke-opacity", "0.4");
+        .attr("cx",px).attr("cy",py).attr("r",r+6)
+        .attr("fill","none").attr("stroke",c)
+        .attr("stroke-width","1.5").attr("stroke-opacity","0.4");
     }
-
     g.append("circle")
-      .attr("cx", px).attr("cy", py)
-      .attr("r", r)
-      .attr("fill", c)
-      .attr("fill-opacity", site.status === "withdrawn" ? 0.4 : 0.88)
-      .attr("stroke", c)
-      .attr("stroke-width", "1.5")
-      .attr("stroke-dasharray", site.status === "withdrawn" ? "3,2" : "none");
+      .attr("cx",px).attr("cy",py).attr("r",r)
+      .attr("fill",c)
+      .attr("fill-opacity", site.status==="withdrawn"?0.4:0.88)
+      .attr("stroke",c).attr("stroke-width","1.5")
+      .attr("stroke-dasharray", site.status==="withdrawn"?"3,2":"none");
 
-    g.on("mouseenter", (event) => {
-      const [si, sbg, stx] = statusInfo(site.status);
+    g.on("mouseenter",(event)=>{
+      const [si,sbg,stx] = statusInfo(site.status);
       const tt = document.getElementById("tt");
       let h = `<div class="tn">${site.name}</div>`;
       h += `<div class="tc">${site.co}</div>`;
-      if (site.mw > 0)
-        h += `<div class="tr"><span>Capacity</span><span class="tv">${site.mw.toLocaleString()} MW</span></div>`;
-      if (site.white != null)
-        h += `<div class="tr"><span>% white residents</span><span class="tv">${site.white}%</span></div>`;
-      if (site.income != null)
-        h += `<div class="tr"><span>Median income</span><span class="tv">$${site.income.toLocaleString()}</span></div>`;
-      h += `<div class="tr"><span>Community resistance</span><span class="tv">${site.resist ? "Yes" : "No"}</span></div>`;
-      h += `<div class="tnotes">${site.notes}</div>`;
-      h += `<span class="tbadge" style="background:${sbg};color:${stx};">${si}</span>`;
-      tt.innerHTML = h;
-      tt.style.display = "block";
-      positionTt(event);
+      if (site.mw>0) h+=`<div class="tr"><span>Capacity</span><span class="tv">${site.mw.toLocaleString()} MW</span></div>`;
+      if (site.white!=null) h+=`<div class="tr"><span>% white residents</span><span class="tv">${site.white}%</span></div>`;
+      if (site.income!=null) h+=`<div class="tr"><span>Median income</span><span class="tv">$${site.income.toLocaleString()}</span></div>`;
+      h+=`<div class="tr"><span>Community resistance</span><span class="tv">${site.resist?"Yes":"No"}</span></div>`;
+      h+=`<div class="tnotes">${site.notes}</div>`;
+      h+=`<span class="tbadge" style="background:${sbg};color:${stx};">${si}</span>`;
+      tt.innerHTML=h; tt.style.display="block"; positionTt(event);
     })
-    .on("mousemove", positionTt)
-    .on("mouseleave", () => {
-      document.getElementById("tt").style.display = "none";
-    });
+    .on("mousemove",positionTt)
+    .on("mouseleave",()=>{ document.getElementById("tt").style.display="none"; });
   });
 }
 
@@ -453,77 +292,62 @@ function positionTt(event) {
   const box = document.getElementById("map-box").getBoundingClientRect();
   let lx = event.clientX - box.left + 14;
   let ly = event.clientY - box.top - 10;
-  if (lx + 250 > box.width) lx = event.clientX - box.left - 254;
-  if (ly < 0) ly = 4;
-  tt.style.left = lx + "px";
-  tt.style.top = ly + "px";
+  if (lx+260>box.width) lx = event.clientX - box.left - 264;
+  if (ly<0) ly=4;
+  tt.style.left=lx+"px"; tt.style.top=ly+"px";
 }
 
-document.querySelectorAll(".fb").forEach(b => {
-  b.addEventListener("click", () => {
-    document.querySelectorAll(".fb").forEach(x => x.classList.remove("on"));
+document.querySelectorAll(".fb").forEach(b=>{
+  b.addEventListener("click",()=>{
+    document.querySelectorAll(".fb").forEach(x=>x.classList.remove("on"));
     b.classList.add("on");
-    activeFilter = b.dataset.f;
+    activeFilter=b.dataset.f;
     if (_svg) renderMarkers(_svg);
     updateStats();
   });
 });
 
-const W = 680, H = 620;
+const W=680, H=620;
 const isDark = matchMedia("(prefers-color-scheme: dark)").matches;
 
-d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json").then(us => {
-  document.getElementById("loading").style.display = "none";
-
+d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json").then(us=>{
+  document.getElementById("loading").style.display="none";
   const allCounties = topojson.feature(us, us.objects.counties);
-  const miFeatures = allCounties.features.filter(f => String(f.id).startsWith("26"));
-  const miGeo = { type: "FeatureCollection", features: miFeatures };
-
-  document.getElementById("map-box").style.background = isDark ? "#1e3a5f" : "#bfdbfe";
-
-  const svg = d3.select("#map-box").append("svg")
-    .attr("viewBox", `0 0 ${W} ${H}`)
-    .attr("width", "100%");
-
-  proj = d3.geoMercator().fitSize([W, H], miGeo);
+  const miFeatures = allCounties.features.filter(f=>String(f.id).startsWith("26"));
+  const miGeo = {type:"FeatureCollection", features:miFeatures};
+  document.getElementById("map-box").style.background = isDark?"#1e3a5f":"#bfdbfe";
+  const svg = d3.select("#map-box").append("svg").attr("viewBox",`0 0 ${W} ${H}`).attr("width","100%");
+  proj = d3.geoMercator().fitSize([W,H],miGeo);
   const path = d3.geoPath(proj);
-
-  svg.selectAll(".county")
-    .data(miFeatures)
-    .join("path")
-    .attr("class", "county")
-    .attr("d", path)
-    .attr("fill", isDark ? "#1a3a2a" : "#d1fae5")
-    .attr("stroke", isDark ? "rgba(255,255,255,0.10)" : "rgba(0,0,0,0.15)")
-    .attr("stroke-width", "0.5");
-
-  const labelCol = isDark ? "rgba(255,255,255,0.38)" : "rgba(0,0,0,0.32)";
-  const cities = [
-    { name:"Detroit",      lat:42.331, lon:-83.046 },
-    { name:"Grand Rapids", lat:42.963, lon:-85.668 },
-    { name:"Lansing",      lat:42.733, lon:-84.556 },
-    { name:"Flint",        lat:43.013, lon:-83.688 },
-    { name:"Ann Arbor",    lat:42.281, lon:-83.748 },
-    { name:"Marquette",    lat:46.544, lon:-87.395 },
-    { name:"Saginaw",      lat:43.419, lon:-83.950 },
-    { name:"Kalamazoo",    lat:42.292, lon:-85.587 },
-  ];
-  cities.forEach(c => {
-    const [cx, cy] = proj([c.lon, c.lat]);
+  svg.selectAll(".county").data(miFeatures).join("path")
+    .attr("class","county").attr("d",path)
+    .attr("fill",isDark?"#1a3a2a":"#d1fae5")
+    .attr("stroke",isDark?"rgba(255,255,255,0.10)":"rgba(0,0,0,0.15)")
+    .attr("stroke-width","0.5");
+  const labelCol = isDark?"rgba(255,255,255,0.38)":"rgba(0,0,0,0.32)";
+  [
+    {name:"Detroit",     lat:42.331,lon:-83.046},
+    {name:"Grand Rapids",lat:42.963,lon:-85.668},
+    {name:"Lansing",     lat:42.733,lon:-84.556},
+    {name:"Flint",       lat:43.013,lon:-83.688},
+    {name:"Ann Arbor",   lat:42.281,lon:-83.748},
+    {name:"Marquette",   lat:46.544,lon:-87.395},
+    {name:"Saginaw",     lat:43.419,lon:-83.950},
+    {name:"Kalamazoo",   lat:42.292,lon:-85.587},
+    {name:"Ypsilanti",   lat:42.241,lon:-83.613},
+  ].forEach(c=>{
+    const pt=proj([c.lon,c.lat]);
+    if (!pt) return;
+    const [cx,cy]=pt;
     svg.append("circle").attr("cx",cx).attr("cy",cy).attr("r",2).attr("fill",labelCol);
-    svg.append("text").attr("x",cx+5).attr("y",cy+4)
-      .attr("font-size","9").attr("fill",labelCol)
-      .attr("font-family","-apple-system, sans-serif")
-      .text(c.name);
+    svg.append("text").attr("x",cx+5).attr("y",cy+4).attr("font-size","9").attr("fill",labelCol).attr("font-family","-apple-system,sans-serif").text(c.name);
   });
-
-  _svg = svg;
+  _svg=svg;
   renderMarkers(svg);
   updateStats();
-
-}).catch(() => {
-  document.getElementById("loading").style.display = "none";
-  document.getElementById("err").style.display = "block";
+}).catch(()=>{
+  document.getElementById("loading").style.display="none";
+  document.getElementById("err").style.display="block";
 });
 </script>
 </body>
