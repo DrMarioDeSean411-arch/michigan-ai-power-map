@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Michigan AI Infrastructure — Projected Water & Power Burden | Dr. Mario DeSean Booker</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #06090f;
+  --surface: #0a0e1a;
+  --surface2: #0f1525;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.1);
+  --text: #e8eeff;
+  --text2: #6a7a9f;
+  --text3: #2e3d5a;
+  --red: #e24b4a;
+  --blue: #378add;
+  --blue-mid: #185fa5;
+  --blue-light: #85b7eb;
+  --green: #639922;
+  --green-dark: #3b6d11;
+  --green-light: #c0dd97;
+  --water: #00b8cc;
+  --amber: #ef9f27;
+  --mono: 'Space Mono', monospace;
+  --sans: 'Space Grotesk', sans-serif;
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  min-height: 100vh;
+}
+
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 0 40px;
+}
+
+/* ── HEADER ── */
+.header-band {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border2);
+  padding: 28px 32px 22px;
+}
+
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  font-family: var(--mono);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pulse-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--red);
+  animation: blink 1.6s step-end infinite;
+  flex-shrink: 0;
+}
+
+@keyframes blink { 50% { opacity: 0; } }
+
+.main-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.sub-title {
+  font-size: 11px;
+  color: var(--text2);
+  font-family: var(--mono);
+  line-height: 1.6;
+}
+
+.author-line {
+  font-size: 11px;
+  color: var(--text3);
+  font-family: var(--mono);
+  margin-top: 4px;
+}
+
+/* ── CONTROLS ── */
+.controls-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 32px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.year-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text2);
+  white-space: nowrap;
+}
+
+.year-display {
+  font-family: var(--mono);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--blue);
+  min-width: 60px;
+  text-shadow: 0 0 20px rgba(55,138,221,0.4);
+  transition: color 0.2s;
+}
+
+input[type=range] {
+  flex: 1;
+  min-width: 140px;
+  height: 4px;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  background: linear-gradient(to right, var(--blue) 0%, var(--blue) var(--pct, 0%), rgba(255,255,255,0.08) var(--pct, 0%), rgba(255,255,255,0.08) 100%);
+}
+
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--blue);
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(55,138,221,0.6);
+  border: 2px solid rgba(255,255,255,0.2);
+}
+
+input[type=range]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--blue);
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(55,138,221,0.6);
+  border: 2px solid rgba(255,255,255,0.2);
+}
+
+.mode-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.mode-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 3px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: transparent;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.14s;
+  white-space: nowrap;
+}
+
+.mode-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+
+.mode-btn.active-water {
+  background: rgba(24,95,165,0.3);
+  color: var(--blue-light);
+  border-color: var(--blue);
+  box-shadow: 0 0 10px rgba(55,138,221,0.25);
+}
+
+.mode-btn.active-power {
+  background: rgba(59,109,17,0.3);
+  color: var(--green-light);
+  border-color: var(--green);
+  box-shadow: 0 0 10px rgba(99,153,34,0.25);
+}
+
+/* ── STATS STRIP ── */
+.stat-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.stat-cell {
+  padding: 14px 20px;
+  border-right: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-cell:last-child { border-right: none; }
+
+.stat-accent {
+  height: 2px;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+}
+
+.stat-num {
+  font-family: var(--mono);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 5px;
+  transition: all 0.3s;
+}
+
+.stat-lbl {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--text3);
+  letter-spacing: 0.04em;
+  line-height: 1.4;
+}
+
+/* ── CHART AREA ── */
+.chart-area {
+  padding: 24px 32px 8px;
+}
+
+.chart-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chart-label {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.flint-legend {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--water);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.flint-dash-icon {
+  width: 20px;
+  height: 2px;
+  background: repeating-linear-gradient(to right, var(--water) 0, var(--water) 4px, transparent 4px, transparent 8px);
+  flex-shrink: 0;
+}
+
+/* ── BARS ── */
+.bars-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 34px;
+}
+
+.site-name {
+  font-size: 10px;
+  font-family: var(--mono);
+  color: var(--text2);
+  width: 140px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bar-outer {
+  flex: 1;
+  position: relative;
+  height: 26px;
+}
+
+.bar-track {
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.03);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 2px;
+  position: relative;
+}
+
+.bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40%;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px 2px 0 0;
+}
+
+.bar-val {
+  position: absolute;
+  right: -68px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--mono);
+  font-size: 10px;
+  white-space: nowrap;
+  font-weight: 700;
+  min-width: 64px;
+}
+
+.growth-tag {
+  font-size: 9px;
+  color: var(--amber);
+  font-family: var(--mono);
+  margin-left: 4px;
+}
+
+.flint-line-container {
+  position: relative;
+  height: 0;
+  margin-left: 150px;
+  margin-right: 80px;
+  margin-bottom: 6px;
+}
+
+.flint-vline {
+  position: absolute;
+  top: -4px;
+  bottom: -240px;
+  width: 1px;
+  pointer-events: none;
+  z-index: 10;
+  background: repeating-linear-gradient(to bottom, var(--water) 0, var(--water) 5px, transparent 5px, transparent 9px);
+}
+
+.flint-marker-label {
+  position: absolute;
+  top: -22px;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--water);
+  white-space: nowrap;
+  background: var(--bg);
+  padding: 0 3px;
+}
+
+.withdrawn-name { color: #2e3650 !important; }
+.withdrawn-val  { color: #2e3650 !important; }
+
+/* ── TIMELINE TICKS ── */
+.timeline-track {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 32px 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+}
+
+/* ── NOTES ── */
+.notes-area {
+  margin: 0 32px;
+  padding: 14px 18px;
+  border: 1px solid rgba(55,138,221,0.15);
+  border-radius: 3px;
+  background: rgba(55,138,221,0.04);
+  margin-bottom: 16px;
+}
+
+.notes-title {
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 8px;
+}
+
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+}
+
+.note-item {
+  font-size: 11px;
+  color: var(--text2);
+  font-family: var(--mono);
+  line-height: 1.55;
+  padding-left: 10px;
+  border-left: 2px solid rgba(55,138,221,0.25);
+}
+
+.note-item strong {
+  color: var(--text);
+  display: block;
+  font-size: 10px;
+  margin-bottom: 2px;
+}
+
+/* ── SOURCE STRIP ── */
+.source-strip {
+  padding: 12px 32px;
+  border-top: 1px solid var(--border);
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--text3);
+  line-height: 1.7;
+}
+
+.source-strip a {
+  color: #2e4a6a;
+  text-decoration: none;
+}
+
+.source-strip a:hover { color: var(--blue-light); }
+
+/* ── DISPUTED BADGE ── */
+.disputed-badge {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 8px;
+  color: var(--amber);
+  border: 1px solid rgba(239,159,39,0.3);
+  background: rgba(239,159,39,0.06);
+  padding: 1px 5px;
+  border-radius: 2px;
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+/* ── DEMOGRAPHIC DOTS ── */
+.demo-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 3px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .header-band, .controls-row, .chart-area, .timeline-track, .source-strip, .notes-area { padding-left: 16px; padding-right: 16px; }
+  .stat-strip { grid-template-columns: repeat(2, 1fr); }
+  .stat-cell:nth-child(2) { border-right: none; }
+  .site-name { width: 100px; font-size: 9px; }
+  .bar-val { font-size: 9px; right: -60px; }
+  .main-title { font-size: 16px; }
+  .flint-line-container { margin-left: 110px; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header-band">
+    <div class="eyebrow">
+      <span class="pulse-dot"></span>
+      Digital Redlining Research Program
+    </div>
+    <div class="main-title">Michigan AI Infrastructure — Projected Water &amp; Power Burden</div>
+    <div class="sub-title">
+      IEA / Gartner electricity demand growth model applied to ten verified Michigan AI data center sites<br>
+      Flint municipal water supply (3.5B gal/yr) used as community impact baseline throughout
+    </div>
+    <div class="author-line">
+      Dr. Mario DeSean Booker, Ph.D. &nbsp;·&nbsp; Purdue University Global &nbsp;·&nbsp; Verified June 2026
+    </div>
+  </div>
+
+  <div class="controls-row">
+    <div class="year-label">Projection year</div>
+    <input type="range" id="yearSlider" min="2026" max="2030" step="1" value="2026" aria-label="Select projection year" />
+    <div class="year-display" id="yearDisplay">2026</div>
+    <div class="mode-btns">
+      <button class="mode-btn active-water" id="btnWater" onclick="setMode('water')">Water burden</button>
+      <button class="mode-btn" id="btnPower" onclick="setMode('power')">Power demand</button>
+    </div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat-cell">
+      <div class="stat-accent" style="background:#378add;"></div>
+      <div class="stat-num" id="s1" style="color:#378add;">10</div>
+      <div class="stat-lbl">Sites tracked</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-accent" style="background:#e24b4a;"></div>
+      <div class="stat-num" id="s2" style="color:#e24b4a;">—</div>
+      <div class="stat-lbl" id="s2lbl">Total projected</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-accent" style="background:#00b8cc;"></div>
+      <div class="stat-num" id="s3" style="color:#00b8cc;">—</div>
+      <div class="stat-lbl" id="s3lbl">Water · gal/yr est.</div>
+    </div>
+    <div class="stat-cell">
+      <div class="stat-accent" style="background:#ef9f27;"></div>
+      <div class="stat-num" id="s4" style="color:#ef9f27;">—</div>
+      <div class="stat-lbl" id="s4lbl">Gartner growth factor</div>
+    </div>
+  </div>
+
+  <div class="chart-area">
+    <div class="chart-label-row">
+      <span class="chart-label" id="chartLabel">Water burden — projected gal / day (IEA + Gartner model)</span>
+      <span class="flint-legend" id="flintLegend">
+        <span class="flint-dash-icon"></span>
+        Flint daily equivalent (9.59M gal/day)
+      </span>
+    </div>
+
+    <div class="flint-line-container" id="flintLineContainer">
+      <div class="flint-vline" id="flintVline"></div>
+      <span class="flint-marker-label" id="flintMarkerLabel">Flint daily</span>
+    </div>
+
+    <div class="bars-wrap" id="barsWrap" role="list" aria-label="Site comparison bars"></div>
+  </div>
+
+  <div class="timeline-track" aria-hidden="true">
+    <span>2026 (baseline)</span>
+    <span>2027 +16%</span>
+    <span>2028 +38%</span>
+    <span>2029 +62%</span>
+    <span>2030 ×2.0 (Gartner peak)</span>
+  </div>
+
+  <div class="notes-area">
+    <div class="notes-title">Methodology notes</div>
+    <div class="notes-grid">
+      <div class="note-item">
+        <strong>Power-to-water baseline</strong>
+        IEA / Congressional Research Service: 100 MW = ~530,000 gal/day. Applied linearly by site capacity.
+      </div>
+      <div class="note-item">
+        <strong>Gartner growth multiplier</strong>
+        Global data center electricity demand: 448 TWh (2025) → 980 TWh (2030). AI servers: 93 TWh → 432 TWh (nearly 5×).
+      </div>
+      <div class="note-item">
+        <strong>Saline Township dispute</strong>
+        Developer claims 20,000 gal/day via closed-loop cooling. IEA methodology for 1,400 MW would project 7.4M gal/day. Developer claim unverified — flagged as disputed.
+      </div>
+      <div class="note-item">
+        <strong>Flint baseline</strong>
+        City of Flint annual municipal water consumption: 3.5 billion gallons (verified utility data). Daily equivalent: 9.59M gal/day.
+      </div>
+      <div class="note-item">
+        <strong>UN University (June 2026)</strong>
+        Global data center water footprint projected at 9.3 trillion liters by 2030 if current trends persist. IEA: 560B liters consumed in 2023, doubling by 2030.
+      </div>
+      <div class="note-item">
+        <strong>Ypsilanti note</strong>
+        Only majority non-white site (42% white, $41K median income). Utility authority imposed 12-month water moratorium April 2026 despite lowest projected consumption in dataset.
+      </div>
+    </div>
+  </div>
+
+  <div class="source-strip">
+    <strong style="color:#3a5070;">Sources:</strong>
+    Gartner Inc. (Nov. 2025). Electricity demand for data centers to grow 16% in 2025 and double by 2030. &nbsp;·&nbsp;
+    IEA (2024). Data Centres and Data Transmission Networks. &nbsp;·&nbsp;
+    UN University INWEH (June 8, 2026). Environmental Cost of AI's Energy Use: Carbon, Water and Land Footprints. &nbsp;·&nbsp;
+    Congressional Research Service (2024). Data Centers: Power and Water Demands. &nbsp;·&nbsp;
+    City of Flint Utility Data (verified 2025). Annual municipal water consumption 3.5B gallons. &nbsp;·&nbsp;
+    U.S. Census Bureau ACS 2020. &nbsp;·&nbsp;
+    Booker, M.D. (2025). Digital Redlining: AI Infrastructure and Environmental Racism. WJARR 27(01), 974–988.
+    <a href="https://doi.org/10.30574/wjarr.2025.27.1.2602" target="_blank" rel="noopener">doi:10.30574/wjarr.2025.27.1.2602</a>
+    &nbsp;·&nbsp;
+    Booker, M.D. (2025). Watts the Problem? WJARR 28(03), 2124–2133.
+    <a href="https://doi.org/10.30574/wjarr.2025.28.3.4306" target="_blank" rel="noopener">doi:10.30574/wjarr.2025.28.3.4306</a>
+  </div>
+
+</div>
+
+<script>
+const FLINT_GAL_YEAR = 3.5e9;
+const FLINT_GAL_DAY  = FLINT_GAL_YEAR / 365;
+
+const SITES = [
+  {id:"saline",    name:"Saline Twp (Stargate)",   mw:1400, galDay:20000,   disputed:true,  status:"active",   white:89, income:98000},
+  {id:"vanburen",  name:"Van Buren Twp (Google)",  mw:1000, galDay:5300000, disputed:false, status:"active",   white:67, income:62000},
+  {id:"marshall",  name:"Marshall (Alterra)",       mw:1400, galDay:7420000, disputed:false, status:"proposed", white:79, income:48000},
+  {id:"lyon",      name:"Lyon Twp (Verrus/Anth.)",  mw:500,  galDay:2650000, disputed:false, status:"proposed", white:82, income:105000},
+  {id:"hyperscale",name:"Hyperscale Campus",        mw:340,  galDay:1802000, disputed:false, status:"active",   white:null,income:null},
+  {id:"dorr",      name:"Dorr Twp (Microsoft)",     mw:300,  galDay:1590000, disputed:false, status:"proposed", white:91, income:72000},
+  {id:"gaines",    name:"Gaines Twp (Switch)",      mw:237,  galDay:1256100, disputed:false, status:"active",   white:84, income:68000},
+  {id:"gaylord",   name:"Gaylord / Otsego Co.",     mw:200,  galDay:1060000, disputed:false, status:"proposed", white:93, income:55000},
+  {id:"ypsilanti", name:"Ypsilanti Twp (U-M)",      mw:100,  galDay:530000,  disputed:false, status:"proposed", white:42, income:41000},
+  {id:"mundy",     name:"Mundy Twp (SanDisk WD)",   mw:0,    galDay:0,       disputed:false, status:"withdrawn",white:96, income:78213}
+];
+
+const GARTNER = { 2026:1.00, 2027:1.16, 2028:1.38, 2029:1.62, 2030:2.00 };
+
+const COLORS = {
+  active:    { fill:"#185fa5", text:"#85b7eb" },
+  proposed:  { fill:"#3b6d11", text:"#c0dd97" },
+  withdrawn: { fill:"rgba(50,55,70,0.4)", text:"#2e3650" }
+};
+
+let mode = "water";
+let year = 2026;
+
+function setMode(m) {
+  mode = m;
+  document.getElementById("btnWater").className = "mode-btn" + (m==="water" ? " active-water" : "");
+  document.getElementById("btnPower").className = "mode-btn" + (m==="power" ? " active-power" : "");
+  render();
+}
+
+const slider = document.getElementById("yearSlider");
+slider.addEventListener("input", function() {
+  year = parseInt(this.value);
+  document.getElementById("yearDisplay").textContent = year;
+  const pct = ((year - 2026) / 4 * 100).toFixed(1);
+  this.style.setProperty("--pct", pct + "%");
+  render();
+});
+
+function fmtWater(g) {
+  if (!g || g === 0) return "Withdrawn";
+  if (g >= 1e9) return (g/1e9).toFixed(2) + "B gal";
+  if (g >= 1e6) return (g/1e6).toFixed(1) + "M gal";
+  if (g >= 1e3) return Math.round(g/1e3) + "K gal";
+  return g.toLocaleString() + " gal";
+}
+
+function fmtMW(mw) {
+  if (!mw || mw === 0) return "Withdrawn";
+  return mw.toLocaleString() + " MW";
+}
+
+function fmtAnnual(g) {
+  const y = g * 365;
+  if (y >= 1e9) return (y/1e9).toFixed(2) + "B";
+  if (y >= 1e6) return (y/1e6).toFixed(0) + "M";
+  return (y/1e3).toFixed(0) + "K";
+}
+
+function render() {
+  const mult = GARTNER[year];
+  const isWater = mode === "water";
+
+  document.getElementById("chartLabel").textContent = isWater
+    ? "Water burden — projected gal / day (IEA + Gartner model)"
+    : "Power demand — projected MW (Gartner electricity growth model)";
+
+  const flintLegend = document.getElementById("flintLegend");
+  flintLegend.style.opacity = isWater ? "1" : "0.2";
+
+  const projected = SITES.map(s => ({
+    ...s,
+    projGalDay: s.status==="withdrawn" ? 0 : Math.round(s.galDay * mult),
+    projMW:     s.status==="withdrawn" ? 0 : Math.round(s.mw * mult)
+  }));
+
+  const activeSites = projected.filter(s => s.status !== "withdrawn");
+  const maxVal = isWater
+    ? Math.max(...projected.map(s => s.projGalDay), FLINT_GAL_DAY * 1.1)
+    : Math.max(...projected.map(s => s.projMW));
+
+  const totalWaterYear = activeSites.reduce((a,s) => a + s.projGalDay * 365, 0);
+  const totalMW = activeSites.reduce((a,s) => a + s.projMW, 0);
+  const flintMult = (totalWaterYear / FLINT_GAL_YEAR).toFixed(1);
+  const growthPct = Math.round((mult - 1) * 100);
+
+  document.getElementById("s2").textContent = isWater
+    ? fmtAnnual(activeSites.reduce((a,s)=>a+s.projGalDay,0)) + " gal/yr"
+    : totalMW.toLocaleString() + " MW";
+  document.getElementById("s2lbl").textContent = isWater ? "Total water/yr est." : "Total projected MW";
+
+  document.getElementById("s3").textContent = isWater
+    ? flintMult + "× Flint supply"
+    : fmtAnnual(activeSites.reduce((a,s)=>a+s.projGalDay,0)) + " gal/yr";
+  document.getElementById("s3lbl").textContent = isWater ? "Annual Flint multiples" : "Est. water/yr (parallel)";
+
+  document.getElementById("s4").textContent = year === 2026 ? "baseline" : "+" + growthPct + "%";
+  document.getElementById("s4lbl").textContent = "Gartner growth vs 2026";
+
+  const flintFrac = isWater ? Math.min(FLINT_GAL_DAY / maxVal, 0.99) : 0;
+  const flintVline = document.getElementById("flintVline");
+  const flintMarker = document.getElementById("flintMarkerLabel");
+  if (isWater) {
+    flintVline.style.left = (flintFrac * 100).toFixed(2) + "%";
+    flintMarker.style.left = (flintFrac * 100).toFixed(2) + "%";
+    flintVline.style.display = "block";
+    flintMarker.style.display = "block";
+  } else {
+    flintVline.style.display = "none";
+    flintMarker.style.display = "none";
+  }
+
+  const sorted = [...projected].sort((a,b) => {
+    const va = isWater ? b.projGalDay : b.projMW;
+    const vb = isWater ? a.projGalDay : a.projMW;
+    return va - vb;
+  });
+
+  const wrap = document.getElementById("barsWrap");
+  wrap.innerHTML = sorted.map(s => {
+    const val   = isWater ? s.projGalDay : s.projMW;
+    const pct   = maxVal > 0 ? Math.min((val / maxVal) * 100, 100) : 0;
+    const c     = COLORS[s.status];
+    const isW   = s.status === "withdrawn";
+    const valStr = isWater ? fmtWater(val) + "/day" : fmtMW(val);
+    const growth = !isW && year > 2026 && val > 0 ? "+" + growthPct + "%" : "";
+
+    const disputedBadge = s.disputed && isWater
+      ? `<span class="disputed-badge">disputed</span>`
+      : "";
+
+    const demoColor = s.white != null
+      ? (s.white >= 80 ? "#185fa5" : s.white >= 60 ? "#639922" : "#e24b4a")
+      : "#444";
+
+    const demoInfo = s.white != null
+      ? `<span class="demo-dot" style="background:${demoColor};"></span>${s.white}% white`
+      : "";
+
+    const fillStyle = isW
+      ? `background: rgba(40,45,60,0.4); border: 1px dashed rgba(80,85,100,0.3);`
+      : `background: ${c.fill};`;
+
+    return `<div class="bar-row" role="listitem" aria-label="${s.name}: ${valStr}">
+      <div class="site-name ${isW ? "withdrawn-name" : ""}" title="${s.name}">
+        ${s.name}${disputedBadge}
+      </div>
+      <div class="bar-outer">
+        <div class="bar-track">
+          <div class="bar-fill" style="${fillStyle} width:${pct.toFixed(2)}%;"></div>
+        </div>
+        <span class="bar-val ${isW ? "withdrawn-val" : ""}" style="color:${c.text};">
+          ${valStr}${growth ? ` <span class="growth-tag">${growth}</span>` : ""}
+        </span>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+render();
+</script>
+</body>
+</html>
